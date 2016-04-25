@@ -1,10 +1,8 @@
-<#  
-  Credit for a large part of the original code within the following functions was written 
-  by Stephen Testino (https://github.com/stestino): Copy-SrcToStable; 
-  Compile-Project; Get-ScriptBody; Get-ScriptParameters
-#>
-
-# Moves src code to stable
+-<#  		
+-  Credit for a large part of the original code within the following functions was written 		
+-  by Stephen Testino (https://github.com/stestino): Copy-SrcToStable; 		
+-  Compile-Project; Get-ScriptBody; Get-ScriptParameters		
+-#>
 
 function Copy-SrcToStable {
     [CmdletBinding()]
@@ -12,11 +10,7 @@ function Copy-SrcToStable {
     (
         [Parameter(Mandatory = $false,
                    Position = 0)]
-        $Location,
-
-        [Parameter(Mandatory = $false,
-                   Position = 1)]
-        $Name
+        $Location
 
     )
 
@@ -42,15 +36,25 @@ function Copy-SrcToStable {
     }
 }
 
+<# 
 # Creates project folder structure
+# If neither name nor path are specified, creates project tree in
+# current directory.
+#>
 
 function New-ProjectTree {
     [CmdletBinding()]
     Param
     (
         [Parameter(Mandatory = $false,
-                   Position = 0)]
-        $Path
+        Position = 0)]
+        [string]$Name,
+
+        [Parameter(Mandatory = $false,
+                   Position = 1)]
+        [string]$Path
+
+
     )
 
     # If path is specified, check to see if directory specified at path exists.
@@ -103,13 +107,22 @@ function New-ProjectTree {
         }
     }
     else {
-        # Create project directory in current working directory
-        
-        New-Item -ItemType Directory 'src'
-        New-Item -ItemType Directory 'stable'
-        New-Item -ItemType Directory 'src\helpers'
-        New-Item -ItemType Directory '_amp'
+        if ($Name) {
+            New-Item -ItemType Directory $Name
+            New-Item -ItemType Directory $Name\src
+            New-Item -ItemType Directory $Name\stable
+            New-Item -ItemType Directory $Name\src\helpers
+            New-Item -ItemType Directory $Name\_amp
 
+        }
+        else {
+            # Create project directory in current working directory
+            New-Item -ItemType Directory src
+            New-Item -ItemType Directory stable
+            New-Item -ItemType Directory src\helpers
+            New-Item -ItemType Directory _amp
+
+        }
     }
 }
 
@@ -119,13 +132,19 @@ function Compile-Project {
     [CmdletBinding()]
     Param
     (
-        [Parameter(Mandatory = $true,
-                   Position = 0)]
-        $MainScriptLocation
     )
 
-    # Get Scripts from this directory
-    $mainScriptFile = Get-Item $MainScriptLocation
+    # Get Scripts from current (working) project directory
+    try { 
+        $mainScriptFile = Get-Item .\stable\*.ps1 -ErrorAction Stop
+    
+    }
+    catch {
+        Write-Output "No stable folder detected in current working directory: $pwd."
+        Write-Output "Switch to a project directory and run Compile-Project."
+
+    }
+    
 
     $parameters = Get-ScriptParameters -FullName $mainScriptFile.Fullname
 
