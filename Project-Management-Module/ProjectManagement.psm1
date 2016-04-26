@@ -1,8 +1,4 @@
--<#  		
--  Credit for a large part of the original code within the following functions was written 		
--  by Stephen Testino (https://github.com/stestino): Copy-SrcToStable; 		
--  Compile-Project; Get-ScriptBody; Get-ScriptParameters		
--#>
+﻿# Moves src code to stable
 
 function Copy-SrcToStable {
     [CmdletBinding()]
@@ -160,7 +156,10 @@ function Compile-Project {
 
 <# Below are 'helper' functions that handle flattening of files in to one
 ## runscript file. Runscript files are used for N-Central AMPs (Automation
-Policies) #>
+## Policies)
+## 
+## Below written by Stephen Testino
+#>
 
 function Get-ScriptParameters {
     param(
