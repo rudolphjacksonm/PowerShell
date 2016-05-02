@@ -146,7 +146,10 @@ function Compile-Project {
 
     $scriptBody = Get-ScriptBody -FullName $mainScriptFile.Fullname
 
-    $runScriptFile = $parameters + ' ' + $scriptBody
+    $runScriptFile = @()
+    $runScriptFile += $parameters
+    $runScriptFile += ' '
+    $runScriptFile += $scriptBody
 
     # Output the final script
     $runScriptOutput = "$pwd\_amp\$($mainScriptFile.Name)" -replace '(.*).ps1','$1_runScript.ps1'
