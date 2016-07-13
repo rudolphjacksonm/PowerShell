@@ -20,7 +20,7 @@ function Copy-SrcToStable {
         $SourceDir = Get-ChildItem 'src'
         
         # Flat files at root of directory
-        $SourceDir | Where-Object {$_.psiscontainer -eq $false} | select -ExpandProperty FullName | Copy-Item -Destination Stable -Force
+        $SourceDir | Where-Object {$_.psiscontainer -eq $false -and $_.Name -notlike '*Tests.ps1'} | select -ExpandProperty FullName | Copy-Item -Destination Stable -Force
 
         # Subfolders, resursively copied
         $sourcedir | Where-Object {$_.psiscontainer -eq $true -and $_.Name -notlike '*_amp*'} | Select -exp FullName | Copy-Item -Recurse -Destination stable -Force
