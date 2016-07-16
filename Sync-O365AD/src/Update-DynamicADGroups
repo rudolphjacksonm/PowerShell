@@ -1,0 +1,18 @@
+# Main Script #
+
+# Import AD Module
+Import-Module ActiveDirectory
+
+# Initiate Global variables
+$global:SearchOU = 'Enter OU to be searched here'
+$global:AllUsers = Get-ADUser -Filter * -Properties * -SearchBase $global:SearchOU
+
+# Initiate LogStream
+$global:LogStream = @()
+
+# Import Helper functions
+. .\helpers\Process-ADUserTitles.ps1
+
+
+$syncactions = $global:AllUsers | Process-ADUserTitles
+$global:LogStream
