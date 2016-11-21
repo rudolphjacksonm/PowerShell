@@ -39,7 +39,7 @@ Function Get-TrueCryptStatus {
 
     # Store reachable machines in new array
     $onlineComps = @()
-    $ComputerNames | ForEach-Object {
+    $ComputerName | ForEach-Object {
         $currentComputer = $_
         if (Test-Connection $currentComputer -Count 1 -ErrorAction SilentlyContinue) {
             $onlineComps += $currentComputer
