@@ -101,7 +101,7 @@ Function Get-TrueCryptStatus {
         }
     }
 
-    Write-Output "$(Get-Date): EXIT : Exiting script."
+    Write-Output "$(Get-Date) : EXIT : Exiting script."
 
     $resultArray | Export-Csv $global:OutputCSVFileLocation -nti
     $resultArray
