@@ -36,6 +36,7 @@ Function Get-TrueCryptStatus {
     
     # Begin testing connections to remote machines
     $global:LogStream += "$(Get-Date) : INFO : Testing connection to machines in list..."
+    Write-Output "$(Get-Date) : INFO : Testing connection to machines in list..."
 
     # Store reachable machines in new array
     $onlineComps = @()
@@ -46,60 +47,81 @@ Function Get-TrueCryptStatus {
 
             # Logging
             $global:LogStream += "$(Get-Date) : INFO : $currentComputer -- STATUS -- ONLINE"
+            Write-Output "$(Get-Date) : INFO : $currentComputer -- STATUS -- ONLINE"
         
         }
         else {
             # Logging
             $global:LogStream += "$(Get-Date) : INFO : $currentComputer -- STATUS -- OFFLINE"
+            Write-Output "$(Get-Date) : INFO : $currentComputer -- STATUS -- OFFLINE"
 
         }
     }
 
     $resultArray = @()
     $onlineComps | ForEach-Object {
-        $session = New-PSSession -ComputerName $_
+        $currentComp = $_
+        
+        # Log current machine name and build PS Session
+        $global:LogStream += "$(Get-Date) : INFO : Checking status of TrueCrypt on $currentComp"
+        Write-Output "$(Get-Date) : INFO : Checking status of TrueCrypt on $currentComp"
+
+        $session = New-PSSession -ComputerName $currentComp
         $psArray = @()
         
         # Check for installation directories and any .tc files, which indicates an encrypted
         # container present on the system.
-        $result = Invoke-Command -Session $session -ScriptBlock {
-            $ErrorActionPreference = 'SilentlyContinue'
+        try {
+            $result = Invoke-Command -Session $session -ScriptBlock {
+                $ErrorActionPreference = 'SilentlyContinue'
         
-            $resultHash = New-Object System.Collections.Specialized.OrderedDictionary
-            $resultHash += @{
-                Hostname = $env:COMPUTERNAME
-                TrueCrypt_Directory_Exists = Test-Path 'C:\Program Files\TrueCrypt'
-                TrueCrypt_Executable_Exists = Test-Path 'C:\Program Files\TrueCrypt\TrueCrypt.exe'
-                TrueCrypt_CCSKey_Exists = [bool](Get-Item 'HKLM:\SYSTEM\CurrentControlSet\Services\truecrypt')
-                TC_Files_Present = [bool](get-childitem c:\ -Recurse -Filter *.tc)
-            }
+                $resultHash = New-Object System.Collections.Specialized.OrderedDictionary
+                $resultHash += @{
+                    Hostname = $env:COMPUTERNAME
+                    TrueCrypt_Directory_Exists = Test-Path 'C:\Program Files\TrueCrypt'
+                    TrueCrypt_Executable_Exists = Test-Path 'C:\Program Files\TrueCrypt\TrueCrypt.exe'
+                    TrueCrypt_CCSKey_Exists = [bool](Get-Item 'HKLM:\SYSTEM\CurrentControlSet\Services\truecrypt')
+                    TC_Files_Present = [bool](get-childitem c:\ -Recurse -Filter *.tc)
+                }
     
-            $resulthash
+                $resulthash
+
+            }
+
+            # Logging
+            $global:LogStream += "$(Get-Date) : SUCCESS : Retrieved information from $currentComp"
+            Write-Output "$(Get-Date) : SUCCESS : Retrieved information from $currentComp"
+
+            $result = new-object -TypeName psobject -Property $result
+            $resultArray += $result
         }
+        catch {
+            $global:LogStream += "$(Get-Date) : ERROR : $_"
 
-        $result = new-object -TypeName psobject -Property $result
-        $resultArray += $result
-
+        }
     }
 
-    $resultArray | Export-Csv C:\Temp\test.csv -nti
+    Write-Output "$(Get-Date): EXIT : Exiting script."
+
+    $resultArray | Export-Csv $global:OutputCSVFileLocation -nti
     $resultArray
 
 }
+
 
 # Configure global log object and log file location
 $global:LogStream = @()
 $datestamp = (Get-Date).ToShortDateString().Replace('/','_')
 $logfileLocation = 'C:\temp\TrueCrypt' + '_' + $datestamp + '.log'
 
+# Configure location of output CSV
+$global:OutputCSVFileLocation = 'C:\Temp\TrueCrypt' + '_' + $datestamp + '.csv'
+
 # Import CSV file containing list of computers; CSV must contain a column labeled 'hostname'
 $ComputerCSV = Import-CSV 'FULL PATH TO CSV FILE'
 $ComputerNames = $ComputerCSV.hostname
 
-# Configure location of output CSV
-$global:OutputCSVFile = 'C:\Temp\TrueCrypt' + '_' + $datestamp + '.log'
-
-Get-TrueCryptStatus
+Get-TrueCryptStatus -ComputerName $ComputerNames
 
 # Output log file
 $global:LogStream | Out-File $logfileLocation
