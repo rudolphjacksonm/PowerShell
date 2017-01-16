@@ -24,10 +24,11 @@ function Get-InventoryWindow {
 
     # Display weapon window
     $WeaponWindow = @"
+
+$($global:Hero.WeaponStats.Image)
   +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  |          Weapon          
-  |Weapon: $($global:Hero.Weapon)  
-  |Description: $($global:Hero.WeaponStats.Description)           
+  |Weapon: $($global:Hero.Weapon)
+  |Description: $($global:Hero.WeaponStats.Description)
   +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   |Enter a choice:
   |1. Back to Inventory

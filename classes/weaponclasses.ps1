@@ -13,8 +13,45 @@ function Get-Weapon {
                     maxDamage = 4
                     Description = @"
 
-  |A rusty sword hilt with a few inches of steel still protruding.
-  |It has some jagged edges that might scratch someone.
+  |A rusty sword hilt with 
+  |a few inches of steel still protruding.
+  |It has some jagged edges that
+  | might scratch someone.
+"@
+                    Image =  @"    
+                                         :o/      
+                                        :o/       
+                                       /oy;       
+                                     ;osdd;       
+                                    -hhmy;        
+                                   :dhmh;         
+                                  /dhmdd          
+                                 +hhmdMy          
+                                syymdMm-          
+                              ;yyhmmMm.           
+                             .hsddmMd;            
+                            -hydhmMh;             
+                           -hsmhNMs               
+                          /hsmhNMo                
+         .::             /hymhNN/                 
+        -hsy-;          odddymm-                  
+        ;.;-/oo:;     ;ymmdydh.                   
+              ;:os+-;hNNNmNh.                    
+                  -oysoohNNh;                     
+                    sNdyydd.                      
+                   /MMNhs:ohy/;                   
+                  /MMMd/    ./yy/.                
+                 +MMmh-        ;:sho//-           
+                sMMmy;            ;sds.           
+               hMMds               '             
+             .oNNho                               
+            ;+oh::                                                       
+           -/yo;                                     
+      ; '-:/ho;                                      
+      +sooyhs-                                       
+      +hmddmh-                                       
+      .dmyhhh/                                       
+        -:-;                                         
 "@
                 }
             }
@@ -41,6 +78,30 @@ function Get-Weapon {
 
   |A wedge of honed iron attached to a polished wood pole.
   |It's not the most refined weapon but it will do.
+"@
+                    Image = @"
+                   
+                              ':oys.              
+                             :ssoosy/'            
+                           '+soooshdds.           
+                           ++++shddmmmdo.         
+                           -:+shdmmmddddy/'       
+                               '-+hddhhy+/oy:'    
+                                 'oyyy/-:sdho'    
+                               ':yy/yh/:+o/.      
+                             '/hmd/-.' '..        
+                           '/ymh+-                
+                         .+hss+.                  
+                       -sdds/.                    
+                     -sdNNm/'                     
+                   .oNMNNh:                       
+                 -smMMMm+'                        
+              ':hNMMMmo.                          
+           ./smMMMMm+.                            
+      ':/odNMMMMNh/'                              
+      'dNNMMMMd+.'                                
+       .mNNNy-'
+        .ho.                                  
 "@
                 }
             }
