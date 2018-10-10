@@ -1,9 +1,9 @@
 function Get-BattleWindow {
-    Param(
-        $Attacker,
-        $Defender,
-        [int]$Turn
-    )
+  Param(
+    $Attacker,
+    $Defender,
+    [int]$Turn
+  )
     
 $window = @"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -18,25 +18,25 @@ Write-Host $window -ForegroundColor Gray
 }
 
 function Battle {
-    Param(
-        $Attacker,
-        $Defender,
-        [bool]$Ambush
+  Param(
+    $Attacker,
+    $Defender,
+    [bool]$Ambush
 
-    )
+  )
 
-    # Determine if attacker is the Hero character or an enemy
-    $checkAttacker = $Attacker.GetType().name
+  # Determine if attacker is the Hero character or an enemy
+  $checkAttacker = $Attacker.GetType().name
 
-    # Quick health check on both creatures
-    if (($Attacker.Health -eq 0) -or ($Defender.Health -eq 0)) {
-        Write-Output "Cannot fight, one of these creatures is already dead."
-        Write-Output "[BATTLE END]"
+  # Quick health check on both creatures
+  if (($Attacker.Health -eq 0) -or ($Defender.Health -eq 0)) {
+    Write-Output "Cannot fight, one of these creatures is already dead."
+    Write-Output "[BATTLE END]"
 
-    }
+  }
 
-    # If Attacker is not a hero type object, it's an Ambush and the enemy goes first.
-    if ($checkAttacker -notmatch 'Hero') {
+  # If Attacker is not a hero type object, it's an Ambush and the enemy goes first.
+  if ($checkAttacker -notmatch 'Hero') {
         # Set turn to 1
         $turn = 1
 
@@ -82,53 +82,53 @@ Select an action:
 
 "@
 
-            switch ($DefenderAction) {
-                1 {
-                    # Hit the Attacker
-                    $HeroDmg = Get-HeroDamage $global:Hero
-                    $Attacker.Hit($HeroDmg)
-                    Write-Output "$($Attacker.Name) was hit!"
+          switch ($DefenderAction) {
+              1 {
+                  # Hit the Attacker
+                  $HeroDmg = Get-HeroDamage $global:Hero
+                  $Attacker.Hit($HeroDmg)
+                  Write-Output "$($Attacker.Name) was hit!"
 
-                }
+              }
 
-                2 {
-                    # Heal yourself
-                    $healpoints = Get-Heal
-                    $Defender.Heal($healpoints)
-                    Write-Output "$($Defender.Name) healed for $healpoints health."
+              2 {
+                  # Heal yourself
+                  $healpoints = Get-Heal
+                  $Defender.Heal($healpoints)
+                  Write-Output "$($Defender.Name) healed for $healpoints health."
 
-                }
+              }
 
-                3 {
-                    Write-Output "You decided to flee from battle."
-                    Break battle
+              3 {
+                  Write-Output "You decided to flee from battle."
+                  Break battle
 
-                }
+              }
 
-                Default {
-                    Write-Output "Please select a valid option."
-                
-                }
+              Default {
+                  Write-Output "Please select a valid option."
+              
+              }
 
-            }
-            $turn += 1
-            Get-BattleWindow -Attacker $Attacker -Defender $Defender -Turn $turn
+          }
+          $turn += 1
+          Get-BattleWindow -Attacker $Attacker -Defender $Defender -Turn $turn
 
-        }
+      }
+  }
+  else {
+    # Set turn to 1
+    $turn = 1
+
+    Write-Output "~[BATTLE START]~"
+    Get-BattleWindow -Attacker $Attacker -Defender $Defender -Turn $turn
+
+    # Quick health check on both creatures
+    if (($Attacker.Health -eq 0) -or ($Defender.Health -eq 0)) {
+      Write-Output "Cannot fight, one of these creatures is already dead."
+      Write-Output "[BATTLE END]"
+
     }
-    else {
-        # Set turn to 1
-        $turn = 1
-
-        Write-Output "~[BATTLE START]~"
-        Get-BattleWindow -Attacker $Attacker -Defender $Defender -Turn $turn
-
-        # Quick health check on both creatures
-        if (($Attacker.Health -eq 0) -or ($Defender.Health -eq 0)) {
-            Write-Output "Cannot fight, one of these creatures is already dead."
-            Write-Output "[BATTLE END]"
-
-        }
 
         :battle while (($Attacker.Health -gt 0) -and ($Defender.Health -gt 0)) {
 $AttackerAction = Read-Host @"
@@ -195,57 +195,54 @@ Select an action:
             }
             $turn += 1
             Get-BattleWindow -Attacker $Attacker -Defender $Defender -Turn $turn
-            
         }
-
     }
-
-     
 }
 
 Function Get-Damage {
-    Param(
-        $character
-    )
+  Param(
+    $character
+  )
 
 
-    switch ($character.GetType().Name) {
-        Orc {
-            $damage = Get-Random -Minimum 3 -Maximum 26
+  switch ($character.GetType().Name) {
+    Orc {
+      $damage = Get-Random -Minimum 3 -Maximum 26
 
-        }
-        Skeleton {
-            $damage = Get-Random -Minimum 2 -Maximum 16
-
-        }
     }
+    Skeleton {
+      $damage = Get-Random -Minimum 2 -Maximum 16
 
-    $damage
+    }
+  }
+
+  $damage
 }
 
 Function Get-Heal {
-
-    $healpoints = Get-Random -Minimum 2 -Maximum 7
-    $healpoints
+  $healpoints = Get-Random -Minimum 2 -Maximum 7
+  $healpoints
 
 }
 
 Function Get-HeroDamage {
-    Param(
-        [Hero]$Hero
-    )
+  [CmdletBinding()]
+  Param(
+    [Hero]$Hero
+  )
 
-    if ($Hero.Weapon.Value__ -le 7) {
-        $maxDamage = ($Hero.Weapon.Value__ + 1)
-        $minDamage = 1
+  if ($Hero.Weapon.Value__ -le 7) {
+    $maxDamage = ($Hero.Weapon.Value__ + 1)
+    $minDamage = 1
+    Write-Verbose "Hero is dealing damage between $minDamage and $maxDamage"
 
-    }
-    else {
-        $maxDamage = ($Hero.Weapon.Value__ + 1)
-        $minDamage = ([math]::round($Hero.Weapon.Value__ / 5) - 1)
+  }
+  else {
+    $maxDamage = ($Hero.Weapon.Value__ + 1)
+    $minDamage = ([math]::round($Hero.Weapon.Value__ / 5) - 1)
+    Write-Verbose "Hero is dealing damage between $minDamage and $maxDamage"
+  }
 
-    }
-
-    Get-Random -Minimum $minDamage -Maximum $maxDamage
+  Get-Random -Minimum $minDamage -Maximum $maxDamage
 
 }

@@ -1,13 +1,15 @@
 # Import classes
-. .\classes.ps1
+Get-ChildItem $PSScriptRoot/classes | Foreach-Object {
+  . $_.FullName
+} 
+#. $PSScriptRoot/classes/*classes.ps1
 
 # Set background color
 $HOST.UI.RawUI.BackgroundColor = "Black"
-cmd /c cls
 
 # Import helper functions
-. .\helpers\battlefunctions.ps1
-. .\helpers\inventoryfunctions.ps1
+. $PSScriptRoot/helpers/battlefunctions.ps1
+. $PSScriptRoot/helpers/inventoryfunctions.ps1
 
 # Begin Game
 Write-Host @"

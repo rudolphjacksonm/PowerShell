@@ -24,8 +24,6 @@ function Get-InventoryWindow {
 
     # Display weapon window
     $WeaponWindow = @"
-
-$($global:Hero.WeaponStats.Image)
   +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   |Weapon: $($global:Hero.Weapon)
   |Description: $($global:Hero.WeaponStats.Description)
