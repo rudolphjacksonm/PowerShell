@@ -10,9 +10,6 @@ class Creature {
   [int]$Health
   [string]$Name
   [State]$Status
-  
-  # Hidden Properties
-  hidden [string] $Weakness
 
   # Parameterless Constructor
   Creature () {
@@ -46,9 +43,6 @@ class Orc : Creature {
   [int]$Health = 100
   [State]$Status = 'Alive'
 
-  # Hidden properties
-  hidden [string] $Weakness = 'Fire'
-
   # Parameterless constructor
   Orc (){}
 
@@ -71,9 +65,6 @@ class Human : Creature {
   [int]$Health = 80
   [State]$Status = 'Alive'
 
-  # Hidden properties for Human class
-  hidden [string] $Weakness = 'Dark'
-
   Human(){}
 
   Human ([string]$Name) {
@@ -93,6 +84,7 @@ class Hero : Human {
   [Hashtable]$Armor
   [Hashtable]$Weapon
   [Hashtable]$Ring
+  [Array]$Coordinates = @(0, 0, 0)
   
   # Hidden properties
   hidden [hashtable]$WeaponStats
@@ -107,10 +99,11 @@ class Hero : Human {
     $this.Weapon = $Weapon
   }
 
-  Hero ([String]$Name, [Hashtable]$Weapon, [Hashtable]$Armor) {
+  Hero ([String]$Name, [Hashtable]$Weapon, [Hashtable]$Armor, [Array]$Coordinates) {
     $this.Name = $Name
     $this.Armor = $Armor
     $this.Weapon = $Weapon
+    $this.Coordinates = $Coordinates
   }
 }
 

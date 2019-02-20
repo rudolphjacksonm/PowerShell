@@ -4,21 +4,17 @@ function Get-BattleWindow {
     $Defender,
     [int]$Turn
   )
-<#
-$window = @"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Turn: $Turn
-Attacker: $($Attacker.Name) Status: $($Attacker.Status) Health: $($Attacker.Health)
-Defender: $($Defender.Name) Status: $($Defender.Status) Health: $($Defender.Health)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"@#>  
-
-Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" -BackgroundColor DarkRed -ForegroundColor Gray
-Write-Host "Turn: $Turn                                                     " -BackgroundColor DarkRed -ForegroundColor Gray
-Write-Host "Attacker: $($Attacker.Name) Status: $($Attacker.Status) Health: $($Attacker.Health)" -BackgroundColor DarkRed -ForegroundColor Gray
-Write-Host "Defender: $($Defender.Name) Status: $($Defender.Status) Health: $($Defender.Health)" -BackgroundColor DarkRed -ForegroundColor Gray
-Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" -BackgroundColor DarkRed -ForegroundColor Gray
-    
+  cls
+  Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" -BackgroundColor DarkRed -ForegroundColor Gray
+  Write-Host "Turn: $Turn                                                     " -BackgroundColor DarkRed -ForegroundColor Gray
+  Write-Host "Attacker: $($Attacker.Name) Status: $($Attacker.Status) Health: $($Attacker.Health)" -BackgroundColor DarkRed -ForegroundColor Gray
+  Write-Host "Defender: $($Defender.Name) Status: $($Defender.Status) Health: $($Defender.Health)" -BackgroundColor DarkRed -ForegroundColor Gray
+  Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" -BackgroundColor DarkRed -ForegroundColor Gray
+  if ($Defender.Status -match 'Dead') {
+    # Final clear screen if battle is over
+    $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
+    cls
+  }
 }
 
 function Battle {

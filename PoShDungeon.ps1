@@ -24,37 +24,44 @@ Write-Host @"
 "@ -ForegroundColor Red -BackgroundColor Black
 
 $name = Read-Host "What is your name?"
-$startingWeapon = Get-Weapon 'brokenshortsword'
-$startingArmor = Get-Armor 'Cloth_Sack'
-$global:Hero = [Hero]::new($name, $startingWeapon, $startingArmor)
+$global:Hero = [Hero]::new($name, $startingWeapon, $startingArmor, @(0,0,0))
 
-#Equip-Armor $(Get-Armor -Armor $Hero.armor)
-
-
-Write-Host "You're on the first floor of the dungeon."
+# Tutorial level
+# Start
+Show-Room $Hero.Coordinates
 $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
-Write-Host "You see a wooden staircase in the distance. Shafts of sunlight coming through the ceiling are mottled with dust."
+Set-Room -Coordinates @(1,0,0)
+# Hallway
+Show-Room $Hero.Coordinates
 $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
-Write-Host "The staircase spirals down at a sickening angle. You can't quite make out what is at the bottom."
-$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
-Write-Host "As you make your descent, you hear footsteps below you. You aren't sure how far away they are."
-$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
-
 Write-Host "A skeleton leaps out of the shadows!"
-
-$skeleton = [skeleton]::new('Skeleton')
-
-Battle -Attacker $Skeleton -Defender $Hero
-
+$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
+# $skeleton = [skeleton]::new('Skeleton')
+$room = Get-Room -Coordinates $Hero.Coordinates
+$enemy = New-Object -Typename $Room.Enemy
+cls
+Battle -Attacker $enemy -Defender $Hero
 if ($Hero.Status -match 'Dead') {
   Write-Host "GAME OVER" -ForegroundColor Red
   Start-Sleep -10 seconds
   Exit
 }
+# Staircase
+Set-Room -Coordinates @(2,0,0)
+Show-Room $Hero.Coordinates
+$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
+# Staircase B1
+Set-Room -Coordinates @(2,0,1)
+Show-Room -Coordinates @(3,0,1)
+$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
+# While you are not at the 'credits' room and you are still alive, proceed through dungeon
+while (([String]$Hero.Coordinates -notmatch '10, 10, 10') -and ($Hero.Status -match 'Alive')) {
+  # Display location
+  Show-Room -Coordinates $Hero.Coordinates
+  $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
+  cls
+  # Display Choice Menu - prompt with options:
+  # [N] - North [W] - West [E] - East [S] - South
+  # Get-Menu
 
-Write-Host "You're on the second floor of the dungeon."
-Write-Host "To the East and West are damp stone walls. To the North is a long corridor with a chamber at the end."
-Write-Host "What do you want to do next?"
-
-# Bring up prompt here with options: [I] for inventory, [M] for map, [Q] for quit, [L] for look
-
+}
