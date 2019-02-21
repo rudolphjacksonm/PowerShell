@@ -62,6 +62,13 @@ while (([String]$Hero.Coordinates -notmatch '10, 10, 10') -and ($Hero.Status -ma
   cls
   # Display Choice Menu - prompt with options:
   # [N] - North [W] - West [E] - East [S] - South
-  # Get-Menu
+  Read-Host -Prompt
+@"
+Which direction to you want to head in?
+[N] - North
+[W] - West
+[E] - East
+[S] - South
+"@
 
 }

@@ -36,3 +36,25 @@ Function Show-Room {
   $room = $rooms | Where-Object {[String]$_.Coordinates -match [String]$Coordinates}
   Write-Output $room.Description
 }
+
+Function Move-Location {
+  [CmdletBinding()]
+  Param(
+    [Array]$Coordinates,
+    [String]$Direction
+  )
+  switch ($Direction) {
+    'North' {
+      $Hero.Coordinates[1] += 1
+    }
+    'East' {
+      $Hero.Coordinates[0] += 1
+    }
+    'South' {
+      $Hero.Coordinates[1] = +- 1
+    }
+    'West' {
+      $Hero.Coordinates[0] +- 1
+    }
+  }
+}
